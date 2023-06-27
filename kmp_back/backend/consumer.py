@@ -4,6 +4,7 @@ from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
 from django.db import transaction
 import json
+import ast
 
 
 class PracticeConsumer(AsyncWebsocketConsumer):
@@ -52,18 +53,18 @@ class PracticeConsumer(AsyncWebsocketConsumer):
             await self.send_updates({"type": "disconnect"})
 
         self.document_id = document_id
-        document_content = ""
         # Fetch document content from the database
         try:
             document = await database_sync_to_async(Document.objects.get)(documentId=document_id)
-            document_content = document.document_content
+            document_content = ast.literal_eval(document.document_content)
+            await self.send(text_data=json.dumps({'type': 'handle_documentId', 'message': document_content}))
         # Create the document in the database
         except Document.DoesNotExist:
             await database_sync_to_async(Document.objects.create)(
-                documentId=self.document_id, document_content=document_content)
+                documentId=self.document_id, document_content="")
+            await self.send(text_data=json.dumps({'type': 'handle_documentId', 'message': ""}))
 
         # Send document content to the consumer
-        await self.send(text_data=json.dumps({'type': 'handle_documentId', 'message': document_content}))
         await self.send_updates({"type": "connect"})
 
     async def save_document(self, document_content):

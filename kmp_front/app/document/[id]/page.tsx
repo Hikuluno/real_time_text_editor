@@ -54,6 +54,7 @@ export default function Home() {
   const documentId = useParams();
   const autosaveTime = 3000;
 
+  //On receive message
   useEffect(() => {
     if (socket) {
       socket.onmessage = (event) => {
@@ -63,15 +64,22 @@ export default function Home() {
           const data = JSON.parse(event.data);
           const type: String = data.type;
           const message = data.message;
+          var message2 = {
+            ops: [
+              { insert: "Hello " },
+              { insert: "World!", attributes: { bold: true } },
+              { insert: "\n" },
+            ],
+          };
           if (type === "update_message") {
             quill?.updateContents(message);
           } else if (type === "typing_notification") {
             setIsOtherTyping(message);
           } else if (type === "handle_documentId") {
+            console.log("message1! : ", message);
+            console.log("message2! : ", message2);
             quill?.enable();
-            // Quand j'aurai implémenter le backend et que je recevrai un delta
-            // quill?.updateContents(message);
-            quill?.setText(message);
+            quill?.setContents(message, "api");
           }
         } catch (error) {
           console.error("Error parsing JSON:", error);
@@ -80,6 +88,7 @@ export default function Home() {
     }
   }, [socket, quill]);
 
+  //Update on text-change
   useEffect(() => {
     if (socket == null || quill == null) return;
     quill.on("text-change", handleTextChange);
@@ -89,12 +98,13 @@ export default function Home() {
     };
   }, [socket, quill]);
 
+  //Autosave document
   useEffect(() => {
     if (socket == null || quill == null) return;
 
     const interval = setInterval(() => {
       socket.send(
-        JSON.stringify({ type: "save_document", message: quill.getText() })
+        JSON.stringify({ type: "save_document", message: quill.getContents() })
       );
     }, autosaveTime);
     return () => {
@@ -102,6 +112,7 @@ export default function Home() {
     };
   }, [socket, quill]);
 
+  //Load or create document
   useEffect(() => {
     if (socket == null || quill == null) return;
     if (documentLoaded) return;
