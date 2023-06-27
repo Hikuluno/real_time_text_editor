@@ -19,12 +19,30 @@ import { useParams } from "next/navigation";
 export default function Home() {
   const [documentLoaded, setDocumentLoaded] = useState(false);
   const [quill, setQuill] = useState<Quill>();
+  const toolbarOptions = [
+    ["bold", "italic", "underline", "strike"], // toggled buttons
+
+    [{ align: [] }, { list: "ordered" }, { list: "bullet" }],
+
+    [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+    [{ font: [] }],
+
+    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    ["image", "video"],
+
+    ["clean"], // remove formatting button
+  ];
   const wrapperRef = useCallback((wrapper: any) => {
     if (wrapper == null) return;
     wrapper.innerHTML = "";
     const editor = document.createElement("div");
     wrapper.append(editor);
-    const q = new Quill(editor, { theme: "snow" });
+    const q = new Quill(editor, {
+      theme: "snow",
+      modules: {
+        toolbar: toolbarOptions,
+      },
+    });
     q.disable();
     q.setText("Loading ...");
     setQuill(q);
