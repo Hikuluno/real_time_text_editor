@@ -10,9 +10,7 @@ export default function Home() {
       {/* <h1>{data}</h1> */}
       <div className="flex items-center justify-center h-screen   ">
         <Link href={`/document/${uuidv4()}`}>
-          <button className="btn btn-primary">
-            Try a collaborative real-time editing
-          </button>
+          <button className="btn btn-primary">Create a record</button>
         </Link>
       </div>
     </>
