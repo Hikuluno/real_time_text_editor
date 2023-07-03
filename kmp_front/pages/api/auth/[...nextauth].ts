@@ -1,3 +1,4 @@
+import { url } from "@/utils/fetchAPI";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -16,12 +17,25 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
+        const response = await fetch(`${url}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: credentials?.username,
+            password: credentials?.password,
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const { access_token, refresh_token, user } = data;
 
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user;
+          // Vérifiez si les jetons et les informations de l'utilisateur sont présents dans la réponse
+          if (access_token && refresh_token && user) {
+            // Retourne les informations de l'utilisateur
+            return user;
+          }
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null;
