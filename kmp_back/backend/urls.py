@@ -5,6 +5,7 @@ from backend import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("test", views.test, name="index"),
+    path("login", views.login, name="index"),
+    path("logout", views.logout, name="index"),
 
 ]
