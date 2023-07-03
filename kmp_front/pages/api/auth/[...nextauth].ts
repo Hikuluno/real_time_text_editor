@@ -31,18 +31,22 @@ export default NextAuth({
           const data = await response.json();
           const { access_token, refresh_token, user } = data;
 
-          // Vérifiez si les jetons et les informations de l'utilisateur sont présents dans la réponse
           if (access_token && refresh_token && user) {
-            // Retourne les informations de l'utilisateur
-            return user;
+            return data;
           }
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
-
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
+        throw new Error("Login failed"); // Throw an error to prevent automatic handling by NextAuth
       },
     }),
   ],
+
+  callbacks: {
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token, user }) {
+      session.user = token as any;
+      return session;
+    },
+  },
 });

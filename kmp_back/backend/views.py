@@ -8,10 +8,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializer import UserSerializer
+from django.contrib.auth.decorators import login_required
 
 
 @api_view(['GET'])
 def index(request):
+    user = {'username': 'John', 'password': 'Doe'}
+    serializer = UserSerializer(user)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@login_required
+def getAccountInformation(request):
     user = {'username': 'John', 'password': 'Doe'}
     serializer = UserSerializer(user)
     return Response(serializer.data)
@@ -33,7 +42,7 @@ def login(request):
         return Response({
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh),
-            'user': serializer.data
+            'user': serializer.data["username"]
 
         })
     else:
