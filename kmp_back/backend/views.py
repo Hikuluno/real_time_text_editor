@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializer import UserSerializer
+from rest_framework import status
 from django.contrib.auth.decorators import login_required
 
 
@@ -48,7 +49,7 @@ def login(request):
         })
     else:
         # Authentication failed
-        return Response("Login failed")
+        return Response("Login failed", status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['POST'])

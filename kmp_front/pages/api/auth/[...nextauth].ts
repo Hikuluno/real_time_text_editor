@@ -29,13 +29,9 @@ export default NextAuth({
         });
         if (response.ok) {
           const data = await response.json();
-          const { access_token, refresh_token, user } = data;
-
-          if (access_token && refresh_token && user) {
-            return data;
-          }
-          throw new Error("Invalid credentials"); // Throw an error to prevent automatic handling by NextAuth
+          return data;
         }
+        console.log("login failed");
         throw new Error("Login failed"); // Throw an error to prevent automatic handling by NextAuth
       },
     }),
