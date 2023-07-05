@@ -1,9 +1,8 @@
 "use client";
 
-import { getData } from "@/utils/api";
+import { getData } from "@/utils/fetchAPI";
 import dynamic from "next/dynamic";
 import WebSocketComponent from "@/utils/websocketclient";
-import { time } from "console";
 import {
   ChangeEvent,
   SetStateAction,
