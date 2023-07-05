@@ -1,4 +1,5 @@
 import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
 export const url = "http://localhost:8000";
 
@@ -19,7 +20,7 @@ export async function getAccountInformation(session: Session) {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      authorization: `bearer ${session?.user.access_token}`,
+      Authorization: `Bearer ${session?.user.access_token}`,
     },
   });
 }

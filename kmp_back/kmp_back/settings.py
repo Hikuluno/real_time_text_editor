@@ -71,6 +71,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_METHODS = [
     'POST',  # Ajoutez ici les méthodes HTTP autorisées
+    'GET',  # Ajoutez ici les méthodes HTTP autorisées
 ]
 
 

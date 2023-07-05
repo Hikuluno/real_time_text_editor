@@ -34,6 +34,7 @@ export default NextAuth({
           if (access_token && refresh_token && user) {
             return data;
           }
+          throw new Error("Invalid credentials"); // Throw an error to prevent automatic handling by NextAuth
         }
         throw new Error("Login failed"); // Throw an error to prevent automatic handling by NextAuth
       },

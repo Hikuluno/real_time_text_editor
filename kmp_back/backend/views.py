@@ -2,7 +2,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
@@ -19,7 +20,7 @@ def index(request):
 
 
 @api_view(['GET'])
-@login_required
+@permission_classes([IsAuthenticated])
 def getAccountInformation(request):
     user = {'username': 'John', 'password': 'Doe'}
     serializer = UserSerializer(user)
@@ -51,6 +52,7 @@ def login(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def logout(request):
     token = request.data.get('refresh_token')
 

@@ -19,9 +19,6 @@ export default function Home() {
         password: password,
         redirect: false,
       });
-      // Gérer la réponse du backend ici (par exemple, enregistrement du jeton d'authentification)
-      // ...
-      // Rediriger l'utilisateur vers une autre page
     } catch (error) {
       console.error(error);
     }
