@@ -58,7 +58,7 @@ export default function Home() {
   return (
     <>
       <div className="flex items-center justify-center h-screen">
-        {session?.user ? ( //IF LOGGED
+        {session?.user ? ( //IF LOGGED!
           <div>
             <h1>Name : {name} </h1>
             <button className="btn btn-primary my-5" onClick={handleLogout}>
@@ -66,7 +66,7 @@ export default function Home() {
             </button>
           </div>
         ) : (
-          // IF NOT LOGGED
+          // IF NOT LOGGED!
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">User</span>
@@ -84,7 +84,7 @@ export default function Home() {
             </label>
             <input
               type="password"
-              placeholder="Type here"
+              placeholder="Type here "
               className="input input-bordered w-full max-w-xs"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
